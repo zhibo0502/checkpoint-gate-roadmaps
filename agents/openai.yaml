@@ -1,0 +1,4 @@
+interface:
+  display_name: "Checkpoint Gate Roadmaps"
+  short_description: "Help with checkpoint-gated roadmap audits"
+  default_prompt: "Use $checkpoint-gate-roadmaps to design or update a roadmap audit that auto-advances only after the current checkpoint passes its gate."
