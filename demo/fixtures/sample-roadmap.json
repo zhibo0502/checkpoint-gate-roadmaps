@@ -1,0 +1,109 @@
+{
+  "roadmap_name": "Public Demo Roadmap",
+  "checkpoints": [
+    {
+      "key": "CP1",
+      "name": "Scope locked",
+      "done_evidence": [
+        {
+          "label": "commit_subject",
+          "found": true
+        },
+        {
+          "label": "update_log_marker",
+          "found": true
+        }
+      ],
+      "gate": [
+        {
+          "label": "verification_green",
+          "passed": true
+        },
+        {
+          "label": "worktree_clean",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "key": "CP2",
+      "name": "Core implementation",
+      "done_evidence": [
+        {
+          "label": "commit_subject",
+          "found": true
+        },
+        {
+          "label": "update_log_marker",
+          "found": true
+        }
+      ],
+      "gate": [
+        {
+          "label": "verification_green",
+          "passed": true
+        },
+        {
+          "label": "worktree_clean",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "key": "CP3",
+      "name": "Integration wiring",
+      "done_evidence": [
+        {
+          "label": "commit_subject",
+          "found": false
+        },
+        {
+          "label": "update_log_marker",
+          "found": false
+        }
+      ],
+      "gate": [
+        {
+          "label": "verification_green",
+          "passed": false
+        },
+        {
+          "label": "worktree_clean",
+          "passed": true
+        }
+      ]
+    },
+    {
+      "key": "CP4",
+      "name": "Release prep",
+      "done_evidence": [
+        {
+          "label": "release_notes",
+          "found": false
+        }
+      ],
+      "gate": [
+        {
+          "label": "verification_green",
+          "passed": false
+        }
+      ]
+    },
+    {
+      "key": "CP5",
+      "name": "Publish",
+      "done_evidence": [
+        {
+          "label": "release_tag",
+          "found": false
+        }
+      ],
+      "gate": [
+        {
+          "label": "repo_public",
+          "passed": false
+        }
+      ]
+    }
+  ]
+}

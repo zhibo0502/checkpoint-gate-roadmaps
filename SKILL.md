@@ -193,6 +193,21 @@ Bad pattern:
 
 If a snapshot is written, keep it obviously derived and easy to regenerate.
 
+## Public Demo
+
+This repository should include a self-contained runnable demo so the skill can be understood without access to any private project.
+
+Recommended demo shape:
+
+- a small fixture file such as `demo/fixtures/sample-roadmap.json`
+- a tiny CLI such as `demo/check_demo_roadmap.py`
+- smoke tests that prove:
+  - `NEXT` stays on the current checkpoint when completion evidence exists but the gate still fails
+  - `NEXT` advances only after the current gate passes
+  - terminal state is `NEXT | none | all checkpoints are complete`
+
+If a user cannot access the original project that inspired the skill, the public demo must still teach the method end to end.
+
 ## Charlotte Example
 
 If the Charlotte repo is present, concrete examples live here:
