@@ -1,6 +1,6 @@
 ---
 name: checkpoint-gate-roadmaps
-description: Use when a roadmap, MVP program, rollout plan, or integration sequence needs scriptable checkpoints with gate-based auto-advance, explicit NEXT semantics, and evidence-backed status reporting.
+description: Use when a roadmap, staged delivery plan, rollout plan, or integration sequence needs scriptable checkpoints with gate-based auto-advance, explicit NEXT semantics, and evidence-backed status reporting.
 ---
 
 # Checkpoint Gate Roadmaps
@@ -195,7 +195,7 @@ If a snapshot is written, keep it obviously derived and easy to regenerate.
 
 ## Public Demo
 
-This repository should include a self-contained runnable demo so the skill can be understood without access to any private project.
+This repository should include a self-contained runnable demo so the skill can be understood without any external project context.
 
 Recommended demo shape:
 
@@ -206,16 +206,16 @@ Recommended demo shape:
   - `NEXT` advances only after the current gate passes
   - terminal state is `NEXT | none | all checkpoints are complete`
 
-If a user cannot access the original project that inspired the skill, the public demo must still teach the method end to end.
+If a user cannot access the original repository context, the public demo must still teach the method end to end.
 
-## Charlotte Example
+## Scenario Examples
 
-If the Charlotte repo is present, concrete examples live here:
+Use the bundled example docs when you need broader, non-runnable scenario shapes in addition to the public demo:
 
-- `scripts/check_charlotte_ten_mvp_program.py`
-- `scripts/check_charlotte_post_mvp_integration.py`
+- `examples/ten-stage-delivery-program.md`
+- `examples/post-release-integration-rollout.md`
 
-The first audits owner-worktree MVP checkpoints. The second audits post-MVP integration slices. Both rely on the same rule:
+These examples stay generic while demonstrating the same rule:
 
 - `NEXT` is the first gate-unpassed checkpoint, not just the first checkpoint lacking one evidence marker.
 

@@ -1,6 +1,6 @@
 # Public Demo Walkthrough
 
-This walkthrough uses the repository's self-contained demo instead of any private project.
+This walkthrough uses the repository's self-contained demo and requires no external project context.
 
 ## Files
 
@@ -34,7 +34,7 @@ python -m unittest tests/test_demo_roadmap.py
 
 ## Expected Learning
 
-Use this demo when you want to understand or explain the method without relying on Charlotte:
+Use this demo when you want to understand or explain the method without relying on project-specific context:
 
 1. completion evidence and gate status are different concepts
 2. `status=complete` does not imply auto-advance

@@ -6,17 +6,17 @@
   <circle cx="70" cy="68" r="10" fill="#fb7185"/>
   <circle cx="102" cy="68" r="10" fill="#fbbf24"/>
   <circle cx="134" cy="68" r="10" fill="#34d399"/>
-  <text x="170" y="75" fill="#cbd5e1" font-family="Consolas, 'Courier New', monospace" font-size="28">Charlotte Post-MVP Integration Audit</text>
+  <text x="170" y="75" fill="#cbd5e1" font-family="Consolas, 'Courier New', monospace" font-size="28">Phased Integration Rollout Audit</text>
   <text x="56" y="126" fill="#64748b" font-family="Consolas, 'Courier New', monospace" font-size="24">============================================================</text>
 
-  <text x="56" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">SLICE1 | status=complete | clean=yes | advance_ready=yes</text>
-  <text x="56" y="222" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">SLICE2 | status=complete | clean=yes | advance_ready=yes</text>
-  <text x="56" y="266" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">SLICE3 | status=complete | clean=yes | advance_ready=yes</text>
-  <text x="56" y="310" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">SLICE4 | status=complete | clean=yes | advance_ready=yes</text>
-  <text x="56" y="354" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">SLICE5 | status=complete | clean=yes | advance_ready=yes</text>
+  <text x="56" y="178" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">PHASE1 | status=complete | clean=yes | advance_ready=yes</text>
+  <text x="56" y="222" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">PHASE2 | status=complete | clean=yes | advance_ready=yes</text>
+  <text x="56" y="266" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">PHASE3 | status=complete | clean=yes | advance_ready=yes</text>
+  <text x="56" y="310" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">PHASE4 | status=complete | clean=yes | advance_ready=yes</text>
+  <text x="56" y="354" fill="#e2e8f0" font-family="Consolas, 'Courier New', monospace" font-size="24">PHASE5 | status=complete | clean=yes | advance_ready=yes</text>
 
   <rect x="44" y="404" width="1112" height="118" rx="14" fill="#132238" stroke="#1d4ed8" stroke-width="2"/>
-  <text x="68" y="454" fill="#93c5fd" font-family="Consolas, 'Courier New', monospace" font-size="30">NEXT | none | all post-mvp integration checkpoints are complete</text>
+  <text x="68" y="454" fill="#93c5fd" font-family="Consolas, 'Courier New', monospace" font-size="30">NEXT | none | all rollout checkpoints are complete</text>
   <text x="68" y="495" fill="#bfdbfe" font-family="Consolas, 'Courier New', monospace" font-size="22">Rule: NEXT points to the first gate-unpassed checkpoint, not the first missing marker.</text>
 
   <text x="56" y="576" fill="#94a3b8" font-family="Consolas, 'Courier New', monospace" font-size="22">status      = completion evidence found</text>

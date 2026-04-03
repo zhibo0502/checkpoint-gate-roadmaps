@@ -6,7 +6,7 @@ A reusable Codex skill for roadmap audits that need explicit checkpoints, gate-b
 
 一个可复用的 Codex skill，用于把路线图、MVP 计划、集成流程或 rollout 过程做成可审计的检查点系统，并用明确的 gate 规则驱动自动推进。
 
-![Checkpoint Gate Roadmaps preview](assets/charlotte-audit-preview.svg)
+![Checkpoint Gate Roadmaps preview](assets/roadmap-audit-preview.svg)
 
 ## What It Solves
 
@@ -29,9 +29,9 @@ Use this skill when a roadmap should only move forward after the current checkpo
 - `SKILL.md`: main skill body
 - `agents/openai.yaml`: display metadata for Codex
 - `demo/`: self-contained runnable public demo
-- `tests/`: smoke tests for the public demo
-- `examples/`: walkthroughs and project-grounded examples
-- `assets/charlotte-audit-preview.svg`: static visual showing audit output shape
+- `tests/`: smoke tests for the public demo and public wording
+- `examples/`: walkthroughs and scenario-based examples
+- `assets/roadmap-audit-preview.svg`: static visual showing audit output shape
 
 ## Install
 
@@ -49,7 +49,7 @@ $CODEX_HOME/skills/checkpoint-gate-roadmaps/SKILL.md
 
 ## Runnable Demo
 
-This repository now includes a public, self-contained demo that does not depend on the Charlotte codebase.
+This repository includes a public, self-contained demo that does not depend on any external project context.
 
 Run it directly:
 
@@ -71,7 +71,7 @@ Run the smoke tests:
 python -m unittest tests/test_demo_roadmap.py
 ```
 
-这个仓库现在自带一个公开可运行 demo，不再依赖 Charlotte 私有代码。任何人 clone 后都可以直接运行：
+这个仓库现在自带一个公开可运行 demo，不依赖任何外部项目上下文。任何人 clone 后都可以直接运行：
 
 ```text
 python demo/check_demo_roadmap.py
@@ -102,22 +102,13 @@ When every checkpoint is complete and gate-clean, the expected terminal state is
 NEXT | none | all checkpoints are complete
 ```
 
-## Charlotte Examples
+## Scenario Examples
 
-This skill was used to drive Charlotte's:
-
-- ten-MVP owner-worktree audit
-- post-MVP integration slice audit
-- child integration-pack checkpoint audit
-
-Public examples in this repository:
+This repository includes descriptive examples that show the same audit contract in different roadmap shapes:
 
 - [Public Demo Walkthrough](examples/public-demo.md)
-
-Project-grounded examples:
-
-- [Charlotte Ten-MVP Program](examples/charlotte-ten-mvp-program.md)
-- [Charlotte Post-MVP Integration](examples/charlotte-post-mvp-integration.md)
+- [Ten-Stage Delivery Program](examples/ten-stage-delivery-program.md)
+- [Post-Release Integration Rollout](examples/post-release-integration-rollout.md)
 
 ## Versioning
 
