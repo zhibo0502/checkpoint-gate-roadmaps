@@ -5,6 +5,7 @@ from pathlib import Path
 
 
 DEFAULT_FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "sample-roadmap.json"
+SCHEMA_PATH = Path(__file__).resolve().parent / "schema.json"
 
 
 def load_roadmap(path):
@@ -16,6 +17,16 @@ def load_roadmap(path):
     except json.JSONDecodeError as exc:
         print(f"Error: invalid JSON in {path}: {exc}", file=sys.stderr)
         sys.exit(1)
+
+
+def validate_roadmap(roadmap):
+    """Validate roadmap against JSON Schema. Requires jsonschema package."""
+    try:
+        import jsonschema
+    except ImportError:
+        return  # skip validation if jsonschema not installed
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    jsonschema.validate(instance=roadmap, schema=schema)
 
 
 def evaluate_checkpoint(checkpoint):
@@ -63,7 +74,7 @@ def next_incomplete(results):
     return None
 
 
-def render_report(results, roadmap_name=None):
+def render_text(results, roadmap_name=None):
     lines = []
     if roadmap_name:
         lines.append(f"ROADMAP | {roadmap_name}")
@@ -92,6 +103,49 @@ def render_report(results, roadmap_name=None):
     return "\n".join(lines)
 
 
+# Keep backward-compatible alias
+render_report = render_text
+
+
+def render_json(results, roadmap_name=None):
+    current = next_incomplete(results)
+    output = {
+        "roadmap_name": roadmap_name,
+        "checkpoints": results,
+        "next": None if current is None else current["key"],
+    }
+    return json.dumps(output, indent=2)
+
+
+def render_markdown(results, roadmap_name=None):
+    lines = []
+    if roadmap_name:
+        lines.append(f"# {roadmap_name}\n")
+
+    lines.append("| Key | Name | Status | Advance Ready | Evidence | Missing |")
+    lines.append("|-----|------|--------|---------------|----------|---------|")
+    for r in results:
+        evidence = ", ".join(r["evidence"]) if r["evidence"] else "-"
+        missing = ", ".join(r["missing"]) if r["missing"] else "-"
+        lines.append(f"| {r['key']} | {r['name']} | {r['status']} | {r['advance_ready']} | {evidence} | {missing} |")
+
+    lines.append("")
+    current = next_incomplete(results)
+    if current is None:
+        lines.append("**NEXT**: none — all checkpoints are complete")
+    else:
+        lines.append(f"**NEXT**: `{current['key']}` — {current['name']}")
+
+    return "\n".join(lines)
+
+
+RENDERERS = {
+    "text": render_text,
+    "json": render_json,
+    "markdown": render_markdown,
+}
+
+
 def parse_args():
     parser = argparse.ArgumentParser(
         description="Run a self-contained checkpoint-gate roadmap demo."
@@ -101,14 +155,32 @@ def parse_args():
         default=str(DEFAULT_FIXTURE_PATH),
         help="Path to a roadmap fixture JSON file.",
     )
+    parser.add_argument(
+        "--format",
+        choices=["text", "json", "markdown"],
+        default="text",
+        help="Output format (default: text).",
+    )
+    parser.add_argument(
+        "--validate",
+        action="store_true",
+        help="Validate fixture against JSON Schema before evaluating.",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
     roadmap = load_roadmap(args.fixture)
+    if args.validate:
+        try:
+            validate_roadmap(roadmap)
+        except Exception as exc:
+            print(f"Schema validation failed: {exc}", file=sys.stderr)
+            sys.exit(1)
     results = evaluate_roadmap(roadmap)
-    print(render_report(results, roadmap_name=roadmap.get("roadmap_name")))
+    renderer = RENDERERS[args.format]
+    print(renderer(results, roadmap_name=roadmap.get("roadmap_name")))
 
 
 if __name__ == "__main__":

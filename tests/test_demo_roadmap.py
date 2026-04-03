@@ -116,6 +116,64 @@ class DemoRoadmapAuditTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             evaluate_checkpoint({"key": "X1"})
 
+    def test_json_format_output(self):
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), "--format", "json"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        parsed = json.loads(completed.stdout)
+        self.assertEqual("CP2", parsed["next"])
+        self.assertEqual(5, len(parsed["checkpoints"]))
+
+    def test_markdown_format_output(self):
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), "--format", "markdown"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        self.assertIn("| Key |", completed.stdout)
+        self.assertIn("**NEXT**: `CP2`", completed.stdout)
+
+    def test_validate_flag_accepts_valid_fixture(self):
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), "--validate"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+
+    def test_validate_flag_rejects_invalid_fixture(self):
+        import tempfile
+        bad = tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False)
+        bad.write('{"checkpoints": [{"key": 123}]}')
+        bad.close()
+
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), "--fixture", bad.name, "--validate"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertNotEqual(0, completed.returncode)
+        self.assertIn("Schema validation failed", completed.stderr)
+
+        import os
+        os.unlink(bad.name)
+
 
 if __name__ == "__main__":
     unittest.main()

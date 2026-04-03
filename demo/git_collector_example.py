@@ -1,11 +1,11 @@
-"""Minimal git-backed evidence collector.
+"""Git-backed evidence collector.
 
 Demonstrates the 'repo-backed collector' pattern from SKILL.md:
 reads real git state and feeds it into the same evaluator used by
 the static-fixture demo.
 
 Usage:
-    python demo/git_collector_example.py [--repo /path/to/repo]
+    python -m demo.git_collector_example [--repo /path/to/repo] [--format text|json|markdown]
 """
 
 import argparse
@@ -13,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from demo.check_demo_roadmap import evaluate_roadmap, render_report
+from demo.check_demo_roadmap import evaluate_roadmap, RENDERERS
 
 
 def run_git(args, cwd):
@@ -33,23 +33,56 @@ def collect_evidence(repo_path):
     """
     repo = Path(repo_path).resolve()
 
-    # Evidence: has at least one commit
+    # --- Evidence collection ---
+
+    # Has at least one commit
     rc, log_output = run_git(["log", "--oneline", "-1"], cwd=repo)
     has_commits = rc == 0 and bool(log_output)
 
-    # Evidence: CHANGELOG.md exists
+    # CHANGELOG.md exists
     has_changelog = (repo / "CHANGELOG.md").is_file()
 
-    # Evidence: README.md exists
+    # README.md exists
     has_readme = (repo / "README.md").is_file()
 
-    # Gate: worktree is clean
+    # LICENSE file exists
+    has_license = (repo / "LICENSE").is_file()
+
+    # Has CI configuration
+    has_ci = (
+        (repo / ".github" / "workflows").is_dir()
+        and any((repo / ".github" / "workflows").iterdir())
+    )
+
+    # Has tests directory with test files
+    tests_dir = repo / "tests"
+    has_tests = tests_dir.is_dir() and any(tests_dir.glob("test_*.py"))
+
+    # Has git tags (releases)
+    rc, tags_output = run_git(["tag", "--list"], cwd=repo)
+    has_tags = rc == 0 and bool(tags_output)
+
+    # Recent commit within last 30 days
+    rc, recent = run_git(
+        ["log", "-1", "--since=30 days ago", "--oneline"], cwd=repo
+    )
+    has_recent_activity = rc == 0 and bool(recent)
+
+    # --- Gate collection ---
+
+    # Worktree is clean
     rc, status_output = run_git(["status", "--porcelain"], cwd=repo)
     worktree_clean = rc == 0 and status_output == ""
 
-    # Gate: on main or master branch
+    # On main or master branch
     rc, branch = run_git(["branch", "--show-current"], cwd=repo)
     on_main = branch in ("main", "master")
+
+    # No untracked files
+    rc, untracked = run_git(
+        ["ls-files", "--others", "--exclude-standard"], cwd=repo
+    )
+    no_untracked = rc == 0 and untracked == ""
 
     return {
         "roadmap_name": f"Git Collector: {repo.name}",
@@ -60,6 +93,7 @@ def collect_evidence(repo_path):
                 "done_evidence": [
                     {"label": "has_commits", "found": has_commits},
                     {"label": "has_readme", "found": has_readme},
+                    {"label": "has_license", "found": has_license},
                 ],
                 "gate": [
                     {"label": "on_main_branch", "passed": on_main},
@@ -67,25 +101,52 @@ def collect_evidence(repo_path):
             },
             {
                 "key": "DOCS",
-                "name": "Documentation present",
+                "name": "Documentation complete",
                 "done_evidence": [
                     {"label": "has_changelog", "found": has_changelog},
                     {"label": "has_readme", "found": has_readme},
+                    {"label": "has_license", "found": has_license},
                 ],
                 "gate": [
                     {"label": "worktree_clean", "passed": worktree_clean},
                 ],
             },
             {
-                "key": "CLEAN",
-                "name": "Release ready",
+                "key": "TEST",
+                "name": "Testing infrastructure",
                 "done_evidence": [
-                    {"label": "has_commits", "found": has_commits},
-                    {"label": "has_changelog", "found": has_changelog},
+                    {"label": "has_tests", "found": has_tests},
+                    {"label": "has_ci", "found": has_ci},
                 ],
                 "gate": [
                     {"label": "worktree_clean", "passed": worktree_clean},
                     {"label": "on_main_branch", "passed": on_main},
+                ],
+            },
+            {
+                "key": "RELEASE",
+                "name": "Release ready",
+                "done_evidence": [
+                    {"label": "has_tags", "found": has_tags},
+                    {"label": "has_changelog", "found": has_changelog},
+                    {"label": "has_ci", "found": has_ci},
+                ],
+                "gate": [
+                    {"label": "worktree_clean", "passed": worktree_clean},
+                    {"label": "no_untracked_files", "passed": no_untracked},
+                    {"label": "on_main_branch", "passed": on_main},
+                ],
+            },
+            {
+                "key": "ACTIVE",
+                "name": "Actively maintained",
+                "done_evidence": [
+                    {"label": "has_recent_activity", "found": has_recent_activity},
+                    {"label": "has_tests", "found": has_tests},
+                    {"label": "has_ci", "found": has_ci},
+                ],
+                "gate": [
+                    {"label": "worktree_clean", "passed": worktree_clean},
                 ],
             },
         ],
@@ -101,6 +162,12 @@ def main():
         default=".",
         help="Path to git repository (default: current directory).",
     )
+    parser.add_argument(
+        "--format",
+        choices=["text", "json", "markdown"],
+        default="text",
+        help="Output format (default: text).",
+    )
     args = parser.parse_args()
 
     repo_path = Path(args.repo).resolve()
@@ -111,7 +178,8 @@ def main():
 
     roadmap = collect_evidence(repo_path)
     results = evaluate_roadmap(roadmap)
-    print(render_report(results, roadmap_name=roadmap["roadmap_name"]))
+    renderer = RENDERERS[args.format]
+    print(renderer(results, roadmap_name=roadmap["roadmap_name"]))
 
 
 if __name__ == "__main__":

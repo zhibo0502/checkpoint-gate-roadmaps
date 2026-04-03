@@ -76,10 +76,23 @@ ROADMAP | Public Demo Roadmap
 NEXT | CP2 | Core implementation
 ```
 
+Output formats — text (default), JSON, or Markdown:
+
+```text
+python demo/check_demo_roadmap.py --format json
+python demo/check_demo_roadmap.py --format markdown
+```
+
+Validate a fixture against the JSON Schema before evaluation:
+
+```text
+python demo/check_demo_roadmap.py --validate --fixture path/to/roadmap.json
+```
+
 Run the smoke tests:
 
 ```text
-python -m unittest tests/test_demo_roadmap.py
+python -m unittest discover -s tests -p "test_*.py"
 ```
 
 这个仓库现在自带一个公开可运行 demo，不依赖任何外部项目上下文。任何人 clone 后都可以直接运行：

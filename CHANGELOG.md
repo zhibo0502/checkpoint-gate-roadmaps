@@ -5,10 +5,14 @@
 - added `in_progress` status for checkpoints with partial evidence (spec/code alignment)
 - trimmed SKILL.md from 242 to 126 lines, removing redundant NEXT definitions
 - added fixture format documentation to README (bilingual)
-- added git-backed collector example (`demo/git_collector_example.py`) with tests
+- added git-backed collector example (`demo/git_collector_example.py`) with 5 checkpoints
 - added runnable fixtures for ten-stage and post-release examples
 - added error handling: file-not-found, invalid JSON, missing required fields
 - renamed `agents/openai.yaml` to `agents/codex.yaml`
+- added `--format json|markdown` output options for CI integration
+- added `--validate` flag with JSON Schema (`demo/schema.json`)
+- enhanced git collector: license, CI, tests, tags, recent activity checks
+- tests: 8 → 19
 
 ## v0.1.2
 
