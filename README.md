@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/zhibo0502/checkpoint-gate-roadmaps/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/zhibo0502/checkpoint-gate-roadmaps/actions/workflows/ci.yml)
 
-A reusable Codex skill for roadmap audits that need explicit checkpoints, gate-based auto-advance, and durable `NEXT` semantics.
+A Codex skill for turning roadmap progress into an evidence-backed checkpoint audit. It treats `NEXT` as the first gate-unpassed checkpoint, not the first unfinished task.
 
-一个可复用的 Codex skill，用于把路线图、MVP 计划、集成流程或 rollout 过程做成可审计的检查点系统，并用明确的 gate 规则驱动自动推进。
+一个可复用的 Codex skill，用于把路线图、MVP 计划、集成流程或 rollout 过程变成证据驱动的 checkpoint 审计系统。它把 `NEXT` 定义为第一个 gate 尚未通过的 checkpoint，而不是第一个“还没做完的任务”。
 
 ![Checkpoint Gate Roadmaps preview](assets/roadmap-audit-preview.svg)
 
@@ -23,6 +23,17 @@ Use this skill when a roadmap should only move forward after the current checkpo
 - 需要稳定的 `NEXT` 语义，始终指向第一个 gate 尚未通过的 checkpoint
 - dirty worktree、缺 commit、缺文档收口标记、缺验证结果时必须阻止自动推进
 - 想保留 snapshot 方便恢复线程，但又不想让 snapshot 变成唯一真源
+
+## Why This Is Not A Generic Roadmap Skill
+
+Most roadmap skills help generate a plan, summarize progress, or list the next unfinished task. This skill is narrower and stricter: it audits whether the current checkpoint is actually safe to advance.
+
+- A generic roadmap skill asks "what is the next item on the plan?"
+- This skill asks "what is the first gate-unpassed checkpoint?"
+- A generic progress tracker may move on as soon as implementation looks complete.
+- This skill keeps `NEXT` pinned to the current checkpoint until completion evidence and gate conditions both pass.
+- A generic planner can rely on prose status updates.
+- This skill expects durable evidence such as commits, doc markers, verification output, and clean worktree state.
 
 ## Repository Contents
 
@@ -115,7 +126,7 @@ This repository includes descriptive examples that show the same audit contract 
 This repository uses lightweight semantic versioning for published snapshots of the skill.
 
 - initial published release: `v0.1.0`
-- current release in this iteration: `v0.1.1`
+- current release in this iteration: `v0.1.2`
 
 See [CHANGELOG.md](CHANGELOG.md) for release-level notes.
 

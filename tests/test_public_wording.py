@@ -45,6 +45,12 @@ class PublicWordingTests(unittest.TestCase):
 
         self.assertEqual([], flagged)
 
+    def test_readme_explains_positioning_and_difference(self):
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("first gate-unpassed checkpoint", readme)
+        self.assertIn("## Why This Is Not A Generic Roadmap Skill", readme)
+
 
 if __name__ == "__main__":
     unittest.main()
