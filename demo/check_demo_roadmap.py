@@ -24,7 +24,8 @@ def validate_roadmap(roadmap):
     try:
         import jsonschema
     except ImportError:
-        return  # skip validation if jsonschema not installed
+        print("Error: --validate requires the jsonschema package: pip install jsonschema", file=sys.stderr)
+        sys.exit(1)
     schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
     jsonschema.validate(instance=roadmap, schema=schema)
 
