@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.1.2
 
 - generalized public docs, scenario examples, and preview asset names to remove project-specific references
 - removed tracked Python cache artifacts from the published repository
