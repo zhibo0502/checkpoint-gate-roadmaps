@@ -1,5 +1,7 @@
 # checkpoint-gate-roadmaps
 
+[![CI](https://github.com/zhibo0502/checkpoint-gate-roadmaps/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/zhibo0502/checkpoint-gate-roadmaps/actions/workflows/ci.yml)
+
 A reusable Codex skill for roadmap audits that need explicit checkpoints, gate-based auto-advance, and durable `NEXT` semantics.
 
 一个可复用的 Codex skill，用于把路线图、MVP 计划、集成流程或 rollout 过程做成可审计的检查点系统，并用明确的 gate 规则驱动自动推进。
