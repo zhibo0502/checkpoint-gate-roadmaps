@@ -21,6 +21,14 @@ STAGE10 | status=complete | clean=yes | advance_ready=yes
 NEXT | none | all delivery checkpoints are complete
 ```
 
+## Run It
+
+```text
+python demo/check_demo_roadmap.py --fixture examples/fixtures/ten-stage-delivery.json
+```
+
+Expected output: `NEXT | STAGE4 | Integration layer` (complete but dirty worktree).
+
 ## Why This Matters
 
 - delivery-stage completion was kept separate from later integration work

@@ -1,5 +1,6 @@
 import argparse
 import json
+import sys
 from pathlib import Path
 
 
@@ -7,10 +8,21 @@ DEFAULT_FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "sample-ro
 
 
 def load_roadmap(path):
-    return json.loads(Path(path).read_text(encoding="utf-8"))
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        print(f"Error: fixture not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    except json.JSONDecodeError as exc:
+        print(f"Error: invalid JSON in {path}: {exc}", file=sys.stderr)
+        sys.exit(1)
 
 
 def evaluate_checkpoint(checkpoint):
+    for field in ("key", "name"):
+        if field not in checkpoint:
+            raise ValueError(f"checkpoint missing required field: {field}")
+
     found_evidence = [
         proof["label"] for proof in checkpoint.get("done_evidence", []) if proof.get("found")
     ]
@@ -20,7 +32,12 @@ def evaluate_checkpoint(checkpoint):
     passed_gate = [gate["label"] for gate in checkpoint.get("gate", []) if gate.get("passed")]
     missing_gate = [gate["label"] for gate in checkpoint.get("gate", []) if not gate.get("passed")]
 
-    status = "complete" if not missing_evidence else "pending"
+    if not missing_evidence:
+        status = "complete"
+    elif found_evidence:
+        status = "in_progress"
+    else:
+        status = "pending"
     advance_ready = "yes" if status == "complete" and not missing_gate else "no"
     evidence = found_evidence + passed_gate
     missing = missing_evidence + missing_gate

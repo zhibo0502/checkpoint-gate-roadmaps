@@ -1,0 +1,113 @@
+{
+  "roadmap_name": "Ten-Stage Delivery Program",
+  "checkpoints": [
+    {
+      "key": "STAGE1",
+      "name": "Requirements sign-off",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": true }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": true }
+      ]
+    },
+    {
+      "key": "STAGE2",
+      "name": "Architecture review",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": true }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": true }
+      ]
+    },
+    {
+      "key": "STAGE3",
+      "name": "Core module implementation",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": true }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": true }
+      ]
+    },
+    {
+      "key": "STAGE4",
+      "name": "Integration layer",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": true }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": true },
+        { "label": "worktree_clean", "passed": false }
+      ]
+    },
+    {
+      "key": "STAGE5",
+      "name": "API stabilization",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": false }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": false }
+      ]
+    },
+    {
+      "key": "STAGE6",
+      "name": "Performance tuning",
+      "done_evidence": [
+        { "label": "commit_subject", "found": false },
+        { "label": "update_log_marker", "found": false }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": false }
+      ]
+    },
+    {
+      "key": "STAGE7",
+      "name": "Security audit",
+      "done_evidence": [
+        { "label": "commit_subject", "found": false }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": false }
+      ]
+    },
+    {
+      "key": "STAGE8",
+      "name": "Documentation",
+      "done_evidence": [
+        { "label": "commit_subject", "found": false }
+      ],
+      "gate": [
+        { "label": "worktree_clean", "passed": false }
+      ]
+    },
+    {
+      "key": "STAGE9",
+      "name": "Staging deployment",
+      "done_evidence": [
+        { "label": "deploy_marker", "found": false }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": false }
+      ]
+    },
+    {
+      "key": "STAGE10",
+      "name": "Production release",
+      "done_evidence": [
+        { "label": "release_tag", "found": false }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": false },
+        { "label": "worktree_clean", "passed": false }
+      ]
+    }
+  ]
+}

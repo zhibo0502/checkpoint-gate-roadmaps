@@ -20,6 +20,14 @@ That allowed:
 - stable recovery after context compaction
 - parent `NEXT` and child `NEXT` to remain independently truthful
 
+## Run It
+
+```text
+python demo/check_demo_roadmap.py --fixture examples/fixtures/post-release-rollout.json
+```
+
+Expected output: `NEXT | PHASE3 | Retrieval and reporting` (partial evidence, dirty worktree).
+
 ## Gate Behavior
 
 Even after focused tests and full verification were green, `NEXT` did not advance while the worktree was still dirty.

@@ -55,7 +55,7 @@
       "done_evidence": [
         {
           "label": "commit_subject",
-          "found": false
+          "found": true
         },
         {
           "label": "update_log_marker",

@@ -1,0 +1,65 @@
+{
+  "roadmap_name": "Post-Release Integration Rollout",
+  "checkpoints": [
+    {
+      "key": "PHASE1",
+      "name": "Export stabilization",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": true }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": true },
+        { "label": "worktree_clean", "passed": true }
+      ]
+    },
+    {
+      "key": "PHASE2",
+      "name": "Monthly close workflow",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": true }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": true },
+        { "label": "worktree_clean", "passed": true }
+      ]
+    },
+    {
+      "key": "PHASE3",
+      "name": "Retrieval and reporting",
+      "done_evidence": [
+        { "label": "commit_subject", "found": true },
+        { "label": "update_log_marker", "found": false }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": true },
+        { "label": "worktree_clean", "passed": false }
+      ]
+    },
+    {
+      "key": "PHASE4",
+      "name": "Editorial tooling",
+      "done_evidence": [
+        { "label": "commit_subject", "found": false },
+        { "label": "update_log_marker", "found": false }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": false },
+        { "label": "worktree_clean", "passed": true }
+      ]
+    },
+    {
+      "key": "PHASE5",
+      "name": "Final reconciliation",
+      "done_evidence": [
+        { "label": "commit_subject", "found": false },
+        { "label": "update_log_marker", "found": false }
+      ],
+      "gate": [
+        { "label": "verification_green", "passed": false },
+        { "label": "worktree_clean", "passed": false }
+      ]
+    }
+  ]
+}

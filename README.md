@@ -38,7 +38,7 @@ Most roadmap skills help generate a plan, summarize progress, or list the next u
 ## Repository Contents
 
 - `SKILL.md`: main skill body
-- `agents/openai.yaml`: display metadata for Codex
+- `agents/codex.yaml`: display metadata for Codex
 - `demo/`: self-contained runnable public demo
 - `tests/`: smoke tests for the public demo and public wording
 - `examples/`: walkthroughs and scenario-based examples
@@ -94,6 +94,22 @@ python demo/check_demo_roadmap.py
 - 不是简单地指向“第一个少一个标记”的 checkpoint
 - 当当前 checkpoint 已完成但 gate 仍失败时，`NEXT` 必须停留在当前 checkpoint
 
+## Git-Backed Collector Demo
+
+The repository also includes a git-backed collector that reads real repository state (commits, worktree cleanliness, file existence) and feeds it into the same evaluator:
+
+```text
+python -m demo.git_collector_example --repo /path/to/repo
+```
+
+This demonstrates the "repo-backed collector" pattern from SKILL.md — evidence is collected from `git log`, `git status`, and file checks rather than a static JSON fixture.
+
+还提供了一个 git-backed collector，从真实仓库状态（commit、worktree 是否干净、文件是否存在）收集证据，输入到同一个评估器：
+
+```text
+python -m demo.git_collector_example --repo /path/to/repo
+```
+
 ## Core Contract
 
 The skill is built around four fields per checkpoint:
@@ -113,6 +129,38 @@ When every checkpoint is complete and gate-clean, the expected terminal state is
 NEXT | none | all checkpoints are complete
 ```
 
+## Fixture Format
+
+The demo CLI reads a JSON file with the following structure:
+
+```json
+{
+  "roadmap_name": "string — display name for the audit report",
+  "checkpoints": [
+    {
+      "key":  "string — stable identifier (e.g. CP1, MVP3, STAGE5)",
+      "name": "string — short human label",
+      "done_evidence": [
+        { "label": "string — evidence type", "found": true }
+      ],
+      "gate": [
+        { "label": "string — gate condition", "passed": false }
+      ]
+    }
+  ]
+}
+```
+
+- `done_evidence[].found`: `true` if evidence exists, `false` otherwise. Drives `status`.
+- `gate[].passed`: `true` if condition met. All gates must pass for `advance_ready=yes`.
+- Checkpoints are evaluated in array order; `NEXT` is the first that fails.
+
+Fixture 格式说明：
+
+- `done_evidence[].found`：证据是否存在，决定 `status`（全部 true = complete，部分 = in_progress，全 false = pending）
+- `gate[].passed`：gate 条件是否满足，全部 true 才能 `advance_ready=yes`
+- checkpoint 按数组顺序评估，`NEXT` 指向第一个未通过的
+
 ## Scenario Examples
 
 This repository includes descriptive examples that show the same audit contract in different roadmap shapes:
@@ -126,7 +174,7 @@ This repository includes descriptive examples that show the same audit contract 
 This repository uses lightweight semantic versioning for published snapshots of the skill.
 
 - initial published release: `v0.1.0`
-- current release in this iteration: `v0.1.2`
+- current release in this iteration: `v0.2.0`
 
 See [CHANGELOG.md](CHANGELOG.md) for release-level notes.
 
