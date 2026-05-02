@@ -9,6 +9,7 @@ Usage:
 """
 
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -158,6 +159,43 @@ def collect_evidence(repo_path):
     }
 
 
+def evaluate_rule(repo, rule):
+    rule_type = rule["type"]
+    if rule_type == "file_exists":
+        return (repo / rule["path"]).is_file()
+    if rule_type == "git_status_clean":
+        rc, output = run_git(["status", "--porcelain"], cwd=repo)
+        return rc == 0 and output == ""
+    raise ValueError(f"unsupported collector rule type: {rule_type}")
+
+
+def collect_configured_evidence(repo_path, rules):
+    repo = Path(repo_path).resolve()
+    checkpoints = []
+    for checkpoint in rules["checkpoints"]:
+        checkpoints.append(
+            {
+                "key": checkpoint["key"],
+                "name": checkpoint["name"],
+                "done_evidence": [
+                    {
+                        "label": rule["label"],
+                        "found": evaluate_rule(repo, rule),
+                    }
+                    for rule in checkpoint.get("done_evidence", [])
+                ],
+                "gate": [
+                    {
+                        "label": rule["label"],
+                        "passed": evaluate_rule(repo, rule),
+                    }
+                    for rule in checkpoint.get("gate", [])
+                ],
+            }
+        )
+    return {"roadmap_name": rules.get("roadmap_name"), "checkpoints": checkpoints}
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Collect checkpoint evidence from a real git repository."
@@ -177,6 +215,10 @@ def main():
         "--json-out",
         help="Write the machine-readable audit snapshot JSON to a file.",
     )
+    parser.add_argument(
+        "--rules",
+        help="Path to collector rules JSON. When omitted, use the built-in demo collector.",
+    )
     args = parser.parse_args()
 
     repo_path = Path(args.repo).resolve()
@@ -185,7 +227,11 @@ def main():
         print(f"Error: {repo_path} is not a git repository.", file=sys.stderr)
         sys.exit(1)
 
-    roadmap = collect_evidence(repo_path)
+    if args.rules:
+        rules = json.loads(Path(args.rules).read_text(encoding="utf-8"))
+        roadmap = collect_configured_evidence(repo_path, rules)
+    else:
+        roadmap = collect_evidence(repo_path)
     results = evaluate_roadmap(roadmap)
     if args.json_out:
         write_json_snapshot(

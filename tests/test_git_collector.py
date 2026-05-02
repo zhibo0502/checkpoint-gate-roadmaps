@@ -158,6 +158,33 @@ class GitCollectorTests(unittest.TestCase):
         self.assertEqual(1, parsed["snapshot_schema_version"])
         self.assertTrue(parsed["roadmap_name"].startswith("Git Collector:"))
 
+    def test_collect_configured_evidence_from_rules_file(self):
+        from demo.git_collector_example import collect_configured_evidence
+
+        rules = {
+            "roadmap_name": "Configured",
+            "checkpoints": [
+                {
+                    "key": "DOCS",
+                    "name": "Docs",
+                    "done_evidence": [
+                        {"label": "README.md", "type": "file_exists", "path": "README.md"}
+                    ],
+                    "gate": [
+                        {"label": "worktree_clean", "type": "git_status_clean"}
+                    ],
+                }
+            ],
+        }
+
+        with patch.object(Path, "is_file", return_value=True), \
+             patch("demo.git_collector_example.run_git", return_value=(0, "")):
+            roadmap = collect_configured_evidence("/fake/repo", rules)
+
+        checkpoint = roadmap["checkpoints"][0]
+        self.assertTrue(checkpoint["done_evidence"][0]["found"])
+        self.assertTrue(checkpoint["gate"][0]["passed"])
+
 
 if __name__ == "__main__":
     unittest.main()

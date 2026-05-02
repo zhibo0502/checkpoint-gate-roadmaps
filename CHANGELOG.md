@@ -7,6 +7,7 @@
 - added explicit `--fail-on-blocked` exit policy for CI and unattended automation
 - added derived `blocking_reason` to JSON snapshots for automation logs and operator summaries
 - added `--json-out` parity to the git-backed collector demo
+- added configurable git collector rules for reusable repository audits
 
 ## v0.2.0
 

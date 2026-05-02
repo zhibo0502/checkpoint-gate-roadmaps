@@ -1,0 +1,27 @@
+{
+  "roadmap_name": "Configurable Repository Audit",
+  "checkpoints": [
+    {
+      "key": "DOCS",
+      "name": "Documentation present",
+      "done_evidence": [
+        {
+          "label": "README.md",
+          "type": "file_exists",
+          "path": "README.md"
+        },
+        {
+          "label": "CHANGELOG.md",
+          "type": "file_exists",
+          "path": "CHANGELOG.md"
+        }
+      ],
+      "gate": [
+        {
+          "label": "worktree_clean",
+          "type": "git_status_clean"
+        }
+      ]
+    }
+  ]
+}

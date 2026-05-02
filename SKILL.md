@@ -84,6 +84,8 @@ Two-layer audit script:
 1. **Pure checkpoint evaluator**: checkpoint definition + evidence + gate state -> `status`, `advance_ready`, `evidence`, `missing`
 2. **Repo-backed collector**: reads git log, update-log, runtime audit, worktree state; evaluates all checkpoints; renders report
 
+For reusable CLI tools, prefer configurable collector rules over hard-coded project checks. Keep the rule output compatible with the same pure evaluator so fixture-based and repo-backed audits share one `NEXT` contract.
+
 The `NEXT` function must be pure and order-sensitive:
 
 ```python

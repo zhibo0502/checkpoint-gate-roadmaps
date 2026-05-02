@@ -554,7 +554,7 @@ git commit -m "Add json snapshot output to git collector"
 - Modify: `SKILL.md`
 - Modify: `CHANGELOG.md`
 
-- [ ] **Step 1: Write the desired rules fixture**
+- [x] **Step 1: Write the desired rules fixture**
 
 Create `demo/fixtures/repo-collector-rules.json`:
 
@@ -577,7 +577,7 @@ Create `demo/fixtures/repo-collector-rules.json`:
 }
 ```
 
-- [ ] **Step 2: Write failing tests for configured collection**
+- [x] **Step 2: Write failing tests for configured collection**
 
 Add to `tests/test_git_collector.py`:
 
@@ -610,7 +610,7 @@ Add to `tests/test_git_collector.py`:
         self.assertTrue(checkpoint["gate"][0]["passed"])
 ```
 
-- [ ] **Step 3: Run failing test**
+- [x] **Step 3: Run failing test**
 
 ```text
 python -m unittest discover -s tests -p "test_git_collector.py"
@@ -622,7 +622,7 @@ Expected result:
 ImportError: cannot import name 'collect_configured_evidence'
 ```
 
-- [ ] **Step 4: Implement the minimal rule engine**
+- [x] **Step 4: Implement the minimal rule engine**
 
 Add to `demo/git_collector_example.py`:
 
@@ -683,7 +683,7 @@ Select collector:
         roadmap = collect_evidence(repo_path)
 ```
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```text
 python -m unittest discover -s tests -p "test_git_collector.py"

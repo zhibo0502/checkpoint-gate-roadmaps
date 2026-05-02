@@ -152,6 +152,17 @@ fixture demo:
 python -m demo.git_collector_example --repo /path/to/repo --json-out CHECKPOINT_STATUS.json
 ```
 
+For reusable repository audits, pass a collector rules file:
+
+```text
+python -m demo.git_collector_example --repo /path/to/repo --rules demo/fixtures/repo-collector-rules.json --format json
+```
+
+The rules file maps checkpoint evidence and gates to repository checks. The
+current example supports `file_exists` and `git_status_clean` rules, then feeds
+the collected booleans into the same evaluator and snapshot contract as the
+fixture demo.
+
 This demonstrates the "repo-backed collector" pattern from SKILL.md — evidence is collected from `git log`, `git status`, and file checks rather than a static JSON fixture.
 
 还提供了一个 git-backed collector，从真实仓库状态（commit、worktree 是否干净、文件是否存在）收集证据，输入到同一个评估器：
