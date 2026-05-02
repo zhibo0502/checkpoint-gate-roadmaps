@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- added `snapshot_schema_version` to JSON snapshots so downstream automation can detect the snapshot contract version
+
 ## v0.2.0
 
 - added `in_progress` status for checkpoints with partial evidence (spec/code alignment)

@@ -127,6 +127,7 @@ class DemoRoadmapAuditTests(unittest.TestCase):
 
         self.assertEqual(0, completed.returncode, completed.stderr)
         parsed = json.loads(completed.stdout)
+        self.assertEqual(1, parsed["snapshot_schema_version"])
         self.assertEqual("CP2", parsed["next"])
         self.assertEqual("CP2", parsed["NEXT"]["key"])
         self.assertEqual("no", parsed["NEXT"]["advance_ready"])
@@ -149,6 +150,7 @@ class DemoRoadmapAuditTests(unittest.TestCase):
         self.assertIn("NEXT | CP2 | Core implementation", completed.stdout)
 
         snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+        self.assertEqual(1, snapshot["snapshot_schema_version"])
         self.assertEqual("Public Demo Roadmap", snapshot["roadmap_name"])
         self.assertEqual("CP2", snapshot["next"])
         self.assertEqual("CP2", snapshot["NEXT"]["key"])
@@ -177,6 +179,7 @@ class DemoRoadmapAuditTests(unittest.TestCase):
             roadmap_name=roadmap.get("roadmap_name"),
         )
 
+        self.assertEqual(1, snapshot["snapshot_schema_version"])
         self.assertIsNone(snapshot["next"])
         self.assertEqual("none", snapshot["NEXT"]["key"])
         self.assertEqual("all checkpoints are complete", snapshot["NEXT"]["name"])

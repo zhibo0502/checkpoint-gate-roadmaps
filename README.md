@@ -90,10 +90,11 @@ python demo/check_demo_roadmap.py --json-out CHECKPOINT_STATUS.json
 ```
 
 The JSON snapshot is derived from the live evaluator and includes
-`roadmap_name`, `checkpoints`, the backward-compatible `next` key, and a final
-`NEXT` object with `status`, `advance_ready`, `evidence`, and `missing`. Write
-it next to run artifacts when a later session needs to resume from the current
-frontier without trusting conversation state.
+`snapshot_schema_version`, `roadmap_name`, `checkpoints`, the
+backward-compatible `next` key, and a final `NEXT` object with `status`,
+`advance_ready`, `evidence`, and `missing`. Write it next to run artifacts when
+a later session needs to resume from the current frontier without trusting
+conversation state.
 
 Validate a fixture against the JSON Schema before evaluation:
 
@@ -158,6 +159,7 @@ The JSON snapshot uses the same frontier rule:
 
 ```json
 {
+  "snapshot_schema_version": 1,
   "roadmap_name": "Public Demo Roadmap",
   "checkpoints": [
     {

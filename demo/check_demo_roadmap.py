@@ -6,6 +6,7 @@ from pathlib import Path
 
 DEFAULT_FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "sample-roadmap.json"
 SCHEMA_PATH = Path(__file__).resolve().parent / "schema.json"
+SNAPSHOT_SCHEMA_VERSION = 1
 
 
 def load_roadmap(path):
@@ -90,6 +91,7 @@ def build_snapshot(results, roadmap_name=None):
         next_value = dict(current)
 
     return {
+        "snapshot_schema_version": SNAPSHOT_SCHEMA_VERSION,
         "roadmap_name": roadmap_name,
         "checkpoints": [dict(result) for result in results],
         "next": None if current is None else current["key"],
