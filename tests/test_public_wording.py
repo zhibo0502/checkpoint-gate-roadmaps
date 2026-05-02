@@ -10,6 +10,8 @@ FORBIDDEN_CONTENT = (
     "owner-worktree",
     "integration-pack",
     "Charlotte-only",
+    "OCR",
+    "ocr",
 )
 TEXT_SUFFIXES = {".md", ".svg", ".yaml", ".yml", ".txt"}
 

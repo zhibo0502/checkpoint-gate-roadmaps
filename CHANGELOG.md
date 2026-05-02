@@ -10,9 +10,10 @@
 - added error handling: file-not-found, invalid JSON, missing required fields
 - renamed `agents/openai.yaml` to `agents/codex.yaml`
 - added `--format json|markdown` output options for CI integration
+- added `--json-out` to persist the derived audit snapshot, including final `NEXT`, for resumable batch gates
 - added `--validate` flag with JSON Schema (`demo/schema.json`)
 - enhanced git collector: license, CI, tests, tags, recent activity checks
-- tests: 8 → 19
+- tests: 8 → 21
 
 ## v0.1.2
 

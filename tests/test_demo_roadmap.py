@@ -128,7 +128,59 @@ class DemoRoadmapAuditTests(unittest.TestCase):
         self.assertEqual(0, completed.returncode, completed.stderr)
         parsed = json.loads(completed.stdout)
         self.assertEqual("CP2", parsed["next"])
+        self.assertEqual("CP2", parsed["NEXT"]["key"])
+        self.assertEqual("no", parsed["NEXT"]["advance_ready"])
         self.assertEqual(5, len(parsed["checkpoints"]))
+
+    def test_cli_writes_json_snapshot_for_resumable_gate(self):
+        snapshot_path = REPO_ROOT / ".test-audit-snapshot.json"
+        snapshot_path.unlink(missing_ok=True)
+        self.addCleanup(snapshot_path.unlink, missing_ok=True)
+
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), "--json-out", str(snapshot_path)],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        self.assertIn("NEXT | CP2 | Core implementation", completed.stdout)
+
+        snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
+        self.assertEqual("Public Demo Roadmap", snapshot["roadmap_name"])
+        self.assertEqual("CP2", snapshot["next"])
+        self.assertEqual("CP2", snapshot["NEXT"]["key"])
+        self.assertEqual("complete", snapshot["NEXT"]["status"])
+        self.assertEqual("no", snapshot["NEXT"]["advance_ready"])
+        self.assertIn("worktree_clean", snapshot["NEXT"]["missing"])
+
+        checkpoints = snapshot["checkpoints"]
+        self.assertEqual(5, len(checkpoints))
+        for checkpoint in checkpoints:
+            for field in ("key", "name", "status", "advance_ready", "evidence", "missing"):
+                self.assertIn(field, checkpoint)
+
+    def test_json_snapshot_finished_state_reports_next_none(self):
+        from demo.check_demo_roadmap import build_snapshot, evaluate_roadmap
+
+        roadmap = copy.deepcopy(self.load_fixture())
+        for checkpoint in roadmap["checkpoints"]:
+            for proof in checkpoint["done_evidence"]:
+                proof["found"] = True
+            for gate in checkpoint["gate"]:
+                gate["passed"] = True
+
+        snapshot = build_snapshot(
+            evaluate_roadmap(roadmap),
+            roadmap_name=roadmap.get("roadmap_name"),
+        )
+
+        self.assertIsNone(snapshot["next"])
+        self.assertEqual("none", snapshot["NEXT"]["key"])
+        self.assertEqual("all checkpoints are complete", snapshot["NEXT"]["name"])
+        self.assertEqual([], snapshot["NEXT"]["missing"])
 
     def test_markdown_format_output(self):
         completed = subprocess.run(

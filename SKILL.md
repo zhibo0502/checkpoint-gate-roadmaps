@@ -74,7 +74,7 @@ Maintain these stable artifacts:
 - **Plan**: roadmap spec defining ordered checkpoints
 - **Audit script**: CLI computing `status`, `advance_ready`, `NEXT`
 - **Update log**: changelog marker proving checkpoint closure
-- **Snapshot** (optional): `CHECKPOINT_STATUS.md` / `ROADMAP_AUDIT.md` / JSON — derived, never sole source of truth
+- **Snapshot** (optional): `CHECKPOINT_STATUS.md` / `ROADMAP_AUDIT.md` / JSON via `--json-out` — derived, never sole source of truth
 
 ## Implementation Pattern
 
@@ -105,7 +105,7 @@ Lock semantics with three smoke tests:
 
 ## Persistence
 
-Scripts recompute truth from commits, docs, verification, and runtime state. Snapshots improve resume speed but never replace the evaluator. Never let an agent edit markdown to mark progress without audit script backing.
+Scripts recompute truth from commits, docs, verification, and runtime state. Snapshots improve resume speed but never replace the evaluator. JSON snapshots should include per-checkpoint `status`, `advance_ready`, `evidence`, `missing`, and the final `NEXT`. Never let an agent edit markdown to mark progress without audit script backing.
 
 ## Common Mistakes
 

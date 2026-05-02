@@ -75,6 +75,39 @@ def next_incomplete(results):
     return None
 
 
+def build_snapshot(results, roadmap_name=None):
+    current = next_incomplete(results)
+    if current is None:
+        next_value = {
+            "key": "none",
+            "name": "all checkpoints are complete",
+            "status": "complete",
+            "advance_ready": "yes",
+            "evidence": [],
+            "missing": [],
+        }
+    else:
+        next_value = dict(current)
+
+    return {
+        "roadmap_name": roadmap_name,
+        "checkpoints": [dict(result) for result in results],
+        "next": None if current is None else current["key"],
+        "NEXT": next_value,
+    }
+
+
+def write_json_snapshot(snapshot, path):
+    output_path = Path(path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    temp_path = output_path.with_name(f".{output_path.name}.tmp")
+    temp_path.write_text(
+        json.dumps(snapshot, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    temp_path.replace(output_path)
+
+
 def render_text(results, roadmap_name=None):
     lines = []
     if roadmap_name:
@@ -109,13 +142,7 @@ render_report = render_text
 
 
 def render_json(results, roadmap_name=None):
-    current = next_incomplete(results)
-    output = {
-        "roadmap_name": roadmap_name,
-        "checkpoints": results,
-        "next": None if current is None else current["key"],
-    }
-    return json.dumps(output, indent=2)
+    return json.dumps(build_snapshot(results, roadmap_name=roadmap_name), indent=2)
 
 
 def render_markdown(results, roadmap_name=None):
@@ -167,6 +194,10 @@ def parse_args():
         action="store_true",
         help="Validate fixture against JSON Schema before evaluating.",
     )
+    parser.add_argument(
+        "--json-out",
+        help="Write the machine-readable audit snapshot JSON to a file.",
+    )
     return parser.parse_args()
 
 
@@ -180,8 +211,14 @@ def main():
             print(f"Schema validation failed: {exc}", file=sys.stderr)
             sys.exit(1)
     results = evaluate_roadmap(roadmap)
+    roadmap_name = roadmap.get("roadmap_name")
+    if args.json_out:
+        write_json_snapshot(
+            build_snapshot(results, roadmap_name=roadmap_name),
+            args.json_out,
+        )
     renderer = RENDERERS[args.format]
-    print(renderer(results, roadmap_name=roadmap.get("roadmap_name")))
+    print(renderer(results, roadmap_name=roadmap_name))
 
 
 if __name__ == "__main__":

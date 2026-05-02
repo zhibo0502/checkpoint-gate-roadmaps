@@ -83,6 +83,18 @@ python demo/check_demo_roadmap.py --format json
 python demo/check_demo_roadmap.py --format markdown
 ```
 
+Persist a machine-readable audit snapshot for resumable batch gates:
+
+```text
+python demo/check_demo_roadmap.py --json-out CHECKPOINT_STATUS.json
+```
+
+The JSON snapshot is derived from the live evaluator and includes
+`roadmap_name`, `checkpoints`, the backward-compatible `next` key, and a final
+`NEXT` object with `status`, `advance_ready`, `evidence`, and `missing`. Write
+it next to run artifacts when a later session needs to resume from the current
+frontier without trusting conversation state.
+
 Validate a fixture against the JSON Schema before evaluation:
 
 ```text
@@ -140,6 +152,33 @@ When every checkpoint is complete and gate-clean, the expected terminal state is
 
 ```text
 NEXT | none | all checkpoints are complete
+```
+
+The JSON snapshot uses the same frontier rule:
+
+```json
+{
+  "roadmap_name": "Public Demo Roadmap",
+  "checkpoints": [
+    {
+      "key": "CP2",
+      "name": "Core implementation",
+      "status": "complete",
+      "advance_ready": "no",
+      "evidence": ["commit_subject", "update_log_marker", "verification_green"],
+      "missing": ["worktree_clean"]
+    }
+  ],
+  "next": "CP2",
+  "NEXT": {
+    "key": "CP2",
+    "name": "Core implementation",
+    "status": "complete",
+    "advance_ready": "no",
+    "evidence": ["commit_subject", "update_log_marker", "verification_green"],
+    "missing": ["worktree_clean"]
+  }
+}
 ```
 
 ## Fixture Format
