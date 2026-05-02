@@ -43,6 +43,7 @@ Rules:
 
 - **Interactive**: scope still fluid; pause at design boundaries for user confirmation.
 - **Non-interactive** (default after contract agreed): auto-advance when gates pass; stop on hard blockers. Expose via `--non-interactive` flag.
+- **Automation gating**: keep pass/fail semantics explicit first. A CLI may render reports with exit `0` by default, then use a flag such as `--fail-on-blocked` to exit non-zero when `NEXT` is blocked.
 
 ## Failure Thresholds
 

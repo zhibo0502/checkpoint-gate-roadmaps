@@ -106,6 +106,16 @@ Validate a fixture against the JSON Schema before evaluation:
 python demo/check_demo_roadmap.py --validate --fixture path/to/roadmap.json
 ```
 
+Use an explicit non-zero exit code for CI or unattended automation:
+
+```text
+python demo/check_demo_roadmap.py --fail-on-blocked
+```
+
+`--fail-on-blocked` preserves the normal output format but exits `2` when
+`NEXT` still points to a blocked checkpoint. Without this flag, the CLI remains
+read-only and exits `0` after rendering a valid audit report.
+
 Run the smoke tests:
 
 ```text

@@ -7,6 +7,7 @@ from pathlib import Path
 DEFAULT_FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "sample-roadmap.json"
 SCHEMA_PATH = Path(__file__).resolve().parent / "schema.json"
 SNAPSHOT_SCHEMA_VERSION = 1
+EXIT_BLOCKED = 2
 
 
 def load_roadmap(path):
@@ -200,6 +201,11 @@ def parse_args():
         "--json-out",
         help="Write the machine-readable audit snapshot JSON to a file.",
     )
+    parser.add_argument(
+        "--fail-on-blocked",
+        action="store_true",
+        help="Exit with code 2 when NEXT is not complete.",
+    )
     return parser.parse_args()
 
 
@@ -221,6 +227,8 @@ def main():
         )
     renderer = RENDERERS[args.format]
     print(renderer(results, roadmap_name=roadmap_name))
+    if args.fail_on_blocked and next_incomplete(results) is not None:
+        sys.exit(EXIT_BLOCKED)
 
 
 if __name__ == "__main__":

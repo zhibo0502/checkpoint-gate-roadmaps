@@ -223,7 +223,7 @@ git commit -m "Add snapshot schema validation"
 - Modify: `SKILL.md`
 - Modify: `CHANGELOG.md`
 
-- [ ] **Step 1: Write failing tests for blocked and complete states**
+- [x] **Step 1: Write failing tests for blocked and complete states**
 
 Add to `tests/test_demo_roadmap.py`:
 
@@ -274,7 +274,7 @@ Add to `tests/test_demo_roadmap.py`:
         self.assertIn("NEXT | none | all checkpoints are complete", completed.stdout)
 ```
 
-- [ ] **Step 2: Run the failing tests**
+- [x] **Step 2: Run the failing tests**
 
 Run:
 
@@ -288,7 +288,7 @@ Expected result:
 error: unrecognized arguments: --fail-on-blocked
 ```
 
-- [ ] **Step 3: Implement minimal exit policy**
+- [x] **Step 3: Implement minimal exit policy**
 
 In `demo/check_demo_roadmap.py`, add:
 
@@ -314,7 +314,7 @@ At the end of `main()`:
         sys.exit(EXIT_BLOCKED)
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run:
 
@@ -329,7 +329,7 @@ Expected result:
 OK
 ```
 
-- [ ] **Step 5: Document operator behavior**
+- [x] **Step 5: Document operator behavior**
 
 Add README example:
 
@@ -343,7 +343,7 @@ Add explanation:
 Use `--fail-on-blocked` in CI or unattended runs. It preserves normal output but exits `2` when `NEXT` still points to a blocked checkpoint.
 ```
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```text
 git add demo/check_demo_roadmap.py tests/test_demo_roadmap.py README.md SKILL.md CHANGELOG.md

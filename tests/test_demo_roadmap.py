@@ -91,6 +91,52 @@ class DemoRoadmapAuditTests(unittest.TestCase):
         self.assertIn("ROADMAP | Public Demo Roadmap", completed.stdout)
         self.assertIn("NEXT | CP2 | Core implementation", completed.stdout)
 
+    def test_fail_on_blocked_returns_exit_code_two_when_next_exists(self):
+        completed = subprocess.run(
+            [sys.executable, str(SCRIPT_PATH), "--fail-on-blocked"],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertEqual(2, completed.returncode)
+        self.assertIn("NEXT | CP2 | Core implementation", completed.stdout)
+
+    def test_fail_on_blocked_returns_zero_when_all_checkpoints_pass(self):
+        import tempfile
+
+        roadmap = copy.deepcopy(self.load_fixture())
+        for checkpoint in roadmap["checkpoints"]:
+            for proof in checkpoint["done_evidence"]:
+                proof["found"] = True
+            for gate in checkpoint["gate"]:
+                gate["passed"] = True
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as fixture:
+            json.dump(roadmap, fixture)
+            fixture_path = fixture.name
+
+        try:
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT_PATH),
+                    "--fixture",
+                    fixture_path,
+                    "--fail-on-blocked",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+                cwd=REPO_ROOT,
+            )
+        finally:
+            pathlib.Path(fixture_path).unlink(missing_ok=True)
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        self.assertIn("NEXT | none | all checkpoints are complete", completed.stdout)
+
 
     def test_missing_fixture_exits_with_error(self):
         completed = subprocess.run(
