@@ -231,6 +231,33 @@ class DemoRoadmapAuditTests(unittest.TestCase):
         self.assertEqual("all checkpoints are complete", snapshot["NEXT"]["name"])
         self.assertEqual([], snapshot["NEXT"]["missing"])
 
+    def test_snapshot_includes_blocking_reason_for_current_next(self):
+        from demo.check_demo_roadmap import build_snapshot, evaluate_roadmap
+
+        snapshot = build_snapshot(
+            evaluate_roadmap(self.load_fixture()),
+            roadmap_name="Public Demo Roadmap",
+        )
+
+        self.assertEqual(
+            "CP2 is complete but cannot advance because gates are failing: worktree_clean",
+            snapshot["blocking_reason"],
+        )
+
+    def test_finished_snapshot_has_no_blocking_reason(self):
+        from demo.check_demo_roadmap import build_snapshot, evaluate_roadmap
+
+        roadmap = copy.deepcopy(self.load_fixture())
+        for checkpoint in roadmap["checkpoints"]:
+            for proof in checkpoint["done_evidence"]:
+                proof["found"] = True
+            for gate in checkpoint["gate"]:
+                gate["passed"] = True
+
+        snapshot = build_snapshot(evaluate_roadmap(roadmap))
+
+        self.assertIsNone(snapshot["blocking_reason"])
+
     def test_markdown_format_output(self):
         completed = subprocess.run(
             [sys.executable, str(SCRIPT_PATH), "--format", "markdown"],

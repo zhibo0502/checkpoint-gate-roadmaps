@@ -99,6 +99,9 @@ conversation state.
 The generated snapshot also validates against `demo/snapshot_schema.json`, which
 is separate from the fixture schema because snapshots are derived outputs rather
 than user-authored roadmap inputs.
+`blocking_reason` is derived from the current `NEXT`; it is a convenience field
+for operators and automation logs, not a replacement for per-checkpoint
+`missing`.
 
 Validate a fixture against the JSON Schema before evaluation:
 
@@ -193,7 +196,8 @@ The JSON snapshot uses the same frontier rule:
     "advance_ready": "no",
     "evidence": ["commit_subject", "update_log_marker", "verification_green"],
     "missing": ["worktree_clean"]
-  }
+  },
+  "blocking_reason": "CP2 is complete but cannot advance because gates are failing: worktree_clean"
 }
 ```
 

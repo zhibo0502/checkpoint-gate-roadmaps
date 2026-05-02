@@ -106,7 +106,7 @@ Lock semantics with three smoke tests:
 
 ## Persistence
 
-Scripts recompute truth from commits, docs, verification, and runtime state. Snapshots improve resume speed but never replace the evaluator. JSON snapshots should include `snapshot_schema_version`, per-checkpoint `status`, `advance_ready`, `evidence`, `missing`, and the final `NEXT`. If a JSON snapshot is part of an automation contract, keep a schema file for the snapshot output separate from the fixture input schema. Never let an agent edit markdown to mark progress without audit script backing.
+Scripts recompute truth from commits, docs, verification, and runtime state. Snapshots improve resume speed but never replace the evaluator. JSON snapshots should include `snapshot_schema_version`, per-checkpoint `status`, `advance_ready`, `evidence`, `missing`, the final `NEXT`, and a derived `blocking_reason`. If a JSON snapshot is part of an automation contract, keep a schema file for the snapshot output separate from the fixture input schema. Never let an agent edit markdown to mark progress without audit script backing.
 
 ## Common Mistakes
 

@@ -5,6 +5,7 @@
 - added `snapshot_schema_version` to JSON snapshots so downstream automation can detect the snapshot contract version
 - added a dedicated snapshot output schema separate from the roadmap fixture input schema
 - added explicit `--fail-on-blocked` exit policy for CI and unattended automation
+- added derived `blocking_reason` to JSON snapshots for automation logs and operator summaries
 
 ## v0.2.0
 

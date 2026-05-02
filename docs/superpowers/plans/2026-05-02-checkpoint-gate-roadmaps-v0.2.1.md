@@ -361,7 +361,7 @@ git commit -m "Add blocked checkpoint exit policy"
 - Modify: `SKILL.md`
 - Modify: `CHANGELOG.md`
 
-- [ ] **Step 1: Write failing tests for blocker text**
+- [x] **Step 1: Write failing tests for blocker text**
 
 Add to `tests/test_demo_roadmap.py`:
 
@@ -394,7 +394,7 @@ Add to `tests/test_demo_roadmap.py`:
         self.assertIsNone(snapshot["blocking_reason"])
 ```
 
-- [ ] **Step 2: Run failing tests**
+- [x] **Step 2: Run failing tests**
 
 ```text
 python -m unittest discover -s tests -p "test_demo_roadmap.py"
@@ -406,7 +406,7 @@ Expected result:
 KeyError: 'blocking_reason'
 ```
 
-- [ ] **Step 3: Implement blocker summary**
+- [x] **Step 3: Implement blocker summary**
 
 Add to `demo/check_demo_roadmap.py`:
 
@@ -426,7 +426,7 @@ Add to `build_snapshot()`:
         "blocking_reason": describe_blocker(current),
 ```
 
-- [ ] **Step 4: Verify and document**
+- [x] **Step 4: Verify and document**
 
 Run:
 
@@ -440,7 +440,7 @@ Add README text:
 `blocking_reason` is derived from the current `NEXT`; it is a convenience field for operators, not a replacement for per-checkpoint `missing`.
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```text
 git add demo/check_demo_roadmap.py tests/test_demo_roadmap.py README.md SKILL.md CHANGELOG.md

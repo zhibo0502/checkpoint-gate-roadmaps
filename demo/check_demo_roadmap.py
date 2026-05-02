@@ -77,6 +77,18 @@ def next_incomplete(results):
     return None
 
 
+def describe_blocker(current):
+    if current is None:
+        return None
+    missing = ", ".join(current["missing"]) if current["missing"] else "unknown blocker"
+    if current["status"] == "complete":
+        return (
+            f"{current['key']} is complete but cannot advance because gates are failing: "
+            f"{missing}"
+        )
+    return f"{current['key']} is {current['status']} and still missing: {missing}"
+
+
 def build_snapshot(results, roadmap_name=None):
     current = next_incomplete(results)
     if current is None:
@@ -97,6 +109,7 @@ def build_snapshot(results, roadmap_name=None):
         "checkpoints": [dict(result) for result in results],
         "next": None if current is None else current["key"],
         "NEXT": next_value,
+        "blocking_reason": describe_blocker(current),
     }
 
 

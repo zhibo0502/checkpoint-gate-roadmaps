@@ -3,7 +3,14 @@
   "title": "Checkpoint Gate Roadmap Snapshot",
   "description": "Schema for derived checkpoint-gate-roadmaps audit snapshots.",
   "type": "object",
-  "required": ["snapshot_schema_version", "roadmap_name", "checkpoints", "next", "NEXT"],
+  "required": [
+    "snapshot_schema_version",
+    "roadmap_name",
+    "checkpoints",
+    "next",
+    "NEXT",
+    "blocking_reason"
+  ],
   "properties": {
     "snapshot_schema_version": {
       "type": "integer",
@@ -23,6 +30,9 @@
     },
     "NEXT": {
       "$ref": "#/$defs/checkpoint_result"
+    },
+    "blocking_reason": {
+      "type": ["string", "null"]
     }
   },
   "$defs": {
