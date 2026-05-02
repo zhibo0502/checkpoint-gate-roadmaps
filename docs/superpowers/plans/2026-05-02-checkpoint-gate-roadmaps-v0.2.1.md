@@ -457,7 +457,7 @@ git commit -m "Add snapshot blocking reason"
 - Modify: `README.md`
 - Modify: `CHANGELOG.md`
 
-- [ ] **Step 1: Write failing collector CLI test**
+- [x] **Step 1: Write failing collector CLI test**
 
 Add to `tests/test_git_collector.py`:
 
@@ -494,7 +494,7 @@ Add to `tests/test_git_collector.py`:
         self.assertTrue(parsed["roadmap_name"].startswith("Git Collector:"))
 ```
 
-- [ ] **Step 2: Run failing test**
+- [x] **Step 2: Run failing test**
 
 ```text
 python -m unittest discover -s tests -p "test_git_collector.py"
@@ -506,7 +506,7 @@ Expected result:
 error: unrecognized arguments: --json-out
 ```
 
-- [ ] **Step 3: Implement collector parity**
+- [x] **Step 3: Implement collector parity**
 
 In `demo/git_collector_example.py`, import:
 
@@ -533,7 +533,7 @@ Before printing:
         )
 ```
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 ```text
 python -m unittest discover -s tests -p "test_git_collector.py"

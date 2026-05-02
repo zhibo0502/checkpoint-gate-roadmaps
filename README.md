@@ -145,6 +145,13 @@ The repository also includes a git-backed collector that reads real repository s
 python -m demo.git_collector_example --repo /path/to/repo
 ```
 
+The collector also supports the same machine-readable snapshot output as the
+fixture demo:
+
+```text
+python -m demo.git_collector_example --repo /path/to/repo --json-out CHECKPOINT_STATUS.json
+```
+
 This demonstrates the "repo-backed collector" pattern from SKILL.md — evidence is collected from `git log`, `git status`, and file checks rather than a static JSON fixture.
 
 还提供了一个 git-backed collector，从真实仓库状态（commit、worktree 是否干净、文件是否存在）收集证据，输入到同一个评估器：

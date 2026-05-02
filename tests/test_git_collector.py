@@ -5,6 +5,9 @@ from pathlib import Path
 from demo.git_collector_example import collect_evidence
 
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
 def make_run_result(returncode=0, stdout=""):
     result = MagicMock()
     result.returncode = returncode
@@ -123,6 +126,37 @@ class GitCollectorTests(unittest.TestCase):
         parsed = json_mod.loads(output)
         self.assertIn("checkpoints", parsed)
         self.assertIn("next", parsed)
+
+    def test_collector_cli_writes_json_snapshot(self):
+        import json
+        import subprocess
+        import sys
+        import tempfile
+
+        snapshot_path = Path(tempfile.gettempdir()) / "checkpoint-gate-collector-snapshot.json"
+        snapshot_path.unlink(missing_ok=True)
+        self.addCleanup(snapshot_path.unlink, missing_ok=True)
+
+        completed = subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "demo.git_collector_example",
+                "--repo",
+                ".",
+                "--json-out",
+                str(snapshot_path),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+        )
+
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        parsed = json.loads(snapshot_path.read_text(encoding="utf-8"))
+        self.assertEqual(1, parsed["snapshot_schema_version"])
+        self.assertTrue(parsed["roadmap_name"].startswith("Git Collector:"))
 
 
 if __name__ == "__main__":

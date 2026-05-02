@@ -13,7 +13,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-from demo.check_demo_roadmap import evaluate_roadmap, RENDERERS
+from demo.check_demo_roadmap import (
+    build_snapshot,
+    evaluate_roadmap,
+    RENDERERS,
+    write_json_snapshot,
+)
 
 
 def run_git(args, cwd):
@@ -168,6 +173,10 @@ def main():
         default="text",
         help="Output format (default: text).",
     )
+    parser.add_argument(
+        "--json-out",
+        help="Write the machine-readable audit snapshot JSON to a file.",
+    )
     args = parser.parse_args()
 
     repo_path = Path(args.repo).resolve()
@@ -178,6 +187,11 @@ def main():
 
     roadmap = collect_evidence(repo_path)
     results = evaluate_roadmap(roadmap)
+    if args.json_out:
+        write_json_snapshot(
+            build_snapshot(results, roadmap_name=roadmap["roadmap_name"]),
+            args.json_out,
+        )
     renderer = RENDERERS[args.format]
     print(renderer(results, roadmap_name=roadmap["roadmap_name"]))
 
