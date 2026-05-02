@@ -3,6 +3,7 @@
 ## Unreleased
 
 - added `snapshot_schema_version` to JSON snapshots so downstream automation can detect the snapshot contract version
+- added a dedicated snapshot output schema separate from the roadmap fixture input schema
 
 ## v0.2.0
 

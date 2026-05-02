@@ -96,6 +96,10 @@ backward-compatible `next` key, and a final `NEXT` object with `status`,
 a later session needs to resume from the current frontier without trusting
 conversation state.
 
+The generated snapshot also validates against `demo/snapshot_schema.json`, which
+is separate from the fixture schema because snapshots are derived outputs rather
+than user-authored roadmap inputs.
+
 Validate a fixture against the JSON Schema before evaluation:
 
 ```text

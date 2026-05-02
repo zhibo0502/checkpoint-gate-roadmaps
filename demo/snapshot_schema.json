@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Checkpoint Gate Roadmap Snapshot",
+  "description": "Schema for derived checkpoint-gate-roadmaps audit snapshots.",
+  "type": "object",
+  "required": ["snapshot_schema_version", "roadmap_name", "checkpoints", "next", "NEXT"],
+  "properties": {
+    "snapshot_schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "roadmap_name": {
+      "type": ["string", "null"]
+    },
+    "checkpoints": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/checkpoint_result"
+      }
+    },
+    "next": {
+      "type": ["string", "null"]
+    },
+    "NEXT": {
+      "$ref": "#/$defs/checkpoint_result"
+    }
+  },
+  "$defs": {
+    "checkpoint_result": {
+      "type": "object",
+      "required": ["key", "name", "status", "advance_ready", "evidence", "missing"],
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["complete", "in_progress", "pending"]
+        },
+        "advance_ready": {
+          "type": "string",
+          "enum": ["yes", "no"]
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
