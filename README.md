@@ -264,7 +264,7 @@ This repository includes descriptive examples that show the same audit contract 
 This repository uses lightweight semantic versioning for published snapshots of the skill.
 
 - initial published release: `v0.1.0`
-- current release in this iteration: `v0.2.0`
+- current release in this iteration: `v0.3.0`
 
 See [CHANGELOG.md](CHANGELOG.md) for release-level notes.
 

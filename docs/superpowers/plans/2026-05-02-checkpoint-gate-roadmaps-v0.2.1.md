@@ -700,7 +700,7 @@ git commit -m "Add configurable git collector rules"
 - Modify: `CHANGELOG.md`
 - Modify: `README.md`
 
-- [ ] **Step 1: Decide version boundary**
+- [x] **Step 1: Decide version boundary**
 
 Use this rule:
 
@@ -710,7 +710,9 @@ v0.2.2 = explicit exit policy and blocker summary
 v0.3.0 = git collector --json-out parity plus configurable collector rules
 ```
 
-- [ ] **Step 2: Run full verification**
+Release closure decision: Tasks 1-5 landed on one development branch, so the publishable boundary is `v0.3.0`.
+
+- [x] **Step 2: Run full verification**
 
 ```text
 python -m unittest discover -s tests -p "test_*.py"
@@ -736,8 +738,8 @@ After review and merge:
 ```text
 git checkout main
 git pull --ff-only origin main
-git tag -a v0.2.1 -m "v0.2.1"
-git push origin main v0.2.1
+git tag -a v0.3.0 -m "v0.3.0"
+git push origin main v0.3.0
 ```
 
 Do not tag from the development branch.

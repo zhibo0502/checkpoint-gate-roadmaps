@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v0.3.0
 
 - added `snapshot_schema_version` to JSON snapshots so downstream automation can detect the snapshot contract version
 - added a dedicated snapshot output schema separate from the roadmap fixture input schema
@@ -8,6 +8,7 @@
 - added derived `blocking_reason` to JSON snapshots for automation logs and operator summaries
 - added `--json-out` parity to the git-backed collector demo
 - added configurable git collector rules for reusable repository audits
+- tests: 21 -> 29
 
 ## v0.2.0
 
