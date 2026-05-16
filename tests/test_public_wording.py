@@ -53,6 +53,19 @@ class PublicWordingTests(unittest.TestCase):
         self.assertIn("first gate-unpassed checkpoint", readme)
         self.assertIn("## Why This Is Not A Generic Roadmap Skill", readme)
 
+    def test_skill_version_and_install_script_are_documented(self):
+        skill = (REPO_ROOT / "SKILL.md").read_text(encoding="utf-8")
+        readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+        install_script = REPO_ROOT / "scripts" / "install_local.sh"
+
+        self.assertIn("version: 0.3.1-dev", skill)
+        self.assertIn("scripts/install_local.sh", readme)
+        self.assertTrue(install_script.is_file())
+
+        script_text = install_script.read_text(encoding="utf-8")
+        self.assertIn("CODEX_HOME", script_text)
+        self.assertIn("diff -qr", script_text)
+
 
 if __name__ == "__main__":
     unittest.main()

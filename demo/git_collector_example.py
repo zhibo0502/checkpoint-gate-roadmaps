@@ -22,6 +22,9 @@ from demo.check_demo_roadmap import (
 )
 
 
+COLLECTOR_RULES_SCHEMA_PATH = Path(__file__).resolve().parent / "collector_rules_schema.json"
+
+
 def run_git(args, cwd):
     result = subprocess.run(
         ["git"] + args,
@@ -160,13 +163,44 @@ def collect_evidence(repo_path):
 
 
 def evaluate_rule(repo, rule):
-    rule_type = rule["type"]
+    rule_type = rule.get("type")
     if rule_type == "file_exists":
         return (repo / rule["path"]).is_file()
     if rule_type == "git_status_clean":
         rc, output = run_git(["status", "--porcelain"], cwd=repo)
         return rc == 0 and output == ""
     raise ValueError(f"unsupported collector rule type: {rule_type}")
+
+
+def validate_collector_rules(rules):
+    try:
+        import jsonschema
+    except ImportError:
+        print("Error: --rules requires the jsonschema package: pip install jsonschema", file=sys.stderr)
+        sys.exit(1)
+
+    schema = json.loads(COLLECTOR_RULES_SCHEMA_PATH.read_text(encoding="utf-8"))
+    jsonschema.validate(instance=rules, schema=schema)
+
+
+def load_collector_rules(path):
+    try:
+        rules = json.loads(Path(path).read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        print(f"Error: collector rules file not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    except json.JSONDecodeError as exc:
+        print(f"Error: invalid JSON in collector rules {path}: {exc}", file=sys.stderr)
+        sys.exit(1)
+
+    try:
+        validate_collector_rules(rules)
+    except Exception as exc:
+        message = getattr(exc, "message", str(exc))
+        print(f"Error: invalid collector rules in {path}: {message}", file=sys.stderr)
+        sys.exit(1)
+
+    return rules
 
 
 def collect_configured_evidence(repo_path, rules):
@@ -228,7 +262,7 @@ def main():
         sys.exit(1)
 
     if args.rules:
-        rules = json.loads(Path(args.rules).read_text(encoding="utf-8"))
+        rules = load_collector_rules(args.rules)
         roadmap = collect_configured_evidence(repo_path, rules)
     else:
         roadmap = collect_evidence(repo_path)

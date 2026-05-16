@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- added explicit skill version metadata for local/installed drift checks
+- added a local install script that syncs the repository into `$CODEX_HOME/skills/checkpoint-gate-roadmaps` and verifies the result
+- added a collector rules schema and CLI validation for malformed `--rules` files
+- added a shared development requirements file for local tests and CI
+
 ## v0.3.0
 
 - added `snapshot_schema_version` to JSON snapshots so downstream automation can detect the snapshot contract version

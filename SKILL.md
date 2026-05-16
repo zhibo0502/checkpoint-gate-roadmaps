@@ -1,6 +1,7 @@
 ---
 name: checkpoint-gate-roadmaps
 description: Use when a roadmap, staged delivery plan, rollout plan, or integration sequence needs scriptable checkpoints with gate-based auto-advance, explicit NEXT semantics, and evidence-backed status reporting.
+version: 0.3.1-dev
 ---
 
 # Checkpoint Gate Roadmaps

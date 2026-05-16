@@ -6,6 +6,8 @@ from demo.git_collector_example import collect_evidence
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+COLLECTOR_RULES_SCHEMA_PATH = REPO_ROOT / "demo" / "collector_rules_schema.json"
+SAMPLE_RULES_PATH = REPO_ROOT / "demo" / "fixtures" / "repo-collector-rules.json"
 
 
 def make_run_result(returncode=0, stdout=""):
@@ -184,6 +186,61 @@ class GitCollectorTests(unittest.TestCase):
         checkpoint = roadmap["checkpoints"][0]
         self.assertTrue(checkpoint["done_evidence"][0]["found"])
         self.assertTrue(checkpoint["gate"][0]["passed"])
+
+    def test_rules_schema_accepts_sample_rules_file(self):
+        import json
+        import jsonschema
+
+        schema = json.loads(COLLECTOR_RULES_SCHEMA_PATH.read_text(encoding="utf-8"))
+        rules = json.loads(SAMPLE_RULES_PATH.read_text(encoding="utf-8"))
+
+        jsonschema.validate(instance=rules, schema=schema)
+
+    def test_collector_cli_rejects_invalid_rules_file(self):
+        import json
+        import subprocess
+        import sys
+        import tempfile
+
+        invalid_rules = {
+            "roadmap_name": "Broken",
+            "checkpoints": [
+                {
+                    "key": "DOCS",
+                    "name": "Docs",
+                    "done_evidence": [
+                        {"label": "README.md", "path": "README.md"}
+                    ],
+                    "gate": [],
+                }
+            ],
+        }
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as rules:
+            json.dump(invalid_rules, rules)
+            rules_path = rules.name
+
+        try:
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "demo.git_collector_example",
+                    "--repo",
+                    ".",
+                    "--rules",
+                    rules_path,
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+                cwd=REPO_ROOT,
+            )
+        finally:
+            Path(rules_path).unlink(missing_ok=True)
+
+        self.assertNotEqual(0, completed.returncode)
+        self.assertIn("invalid collector rules", completed.stderr)
 
 
 if __name__ == "__main__":

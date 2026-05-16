@@ -58,6 +58,15 @@ Recommended final path:
 $CODEX_HOME/skills/checkpoint-gate-roadmaps/SKILL.md
 ```
 
+For local development, sync the verified repository copy into Codex with:
+
+```text
+scripts/install_local.sh
+```
+
+The script uses `$CODEX_HOME` when set, otherwise `~/.codex`, and verifies that
+the installed skill matches this repository after syncing.
+
 ## Runnable Demo
 
 This repository includes a public, self-contained demo that does not depend on any external project context.
@@ -122,6 +131,7 @@ read-only and exits `0` after rendering a valid audit report.
 Run the smoke tests:
 
 ```text
+pip install -r requirements-dev.txt
 python -m unittest discover -s tests -p "test_*.py"
 ```
 
@@ -162,6 +172,9 @@ The rules file maps checkpoint evidence and gates to repository checks. The
 current example supports `file_exists` and `git_status_clean` rules, then feeds
 the collected booleans into the same evaluator and snapshot contract as the
 fixture demo.
+Rules files validate against `demo/collector_rules_schema.json` before
+collection, so malformed reusable audits fail before any checkpoint status is
+rendered.
 
 This demonstrates the "repo-backed collector" pattern from SKILL.md — evidence is collected from `git log`, `git status`, and file checks rather than a static JSON fixture.
 
@@ -265,6 +278,7 @@ This repository uses lightweight semantic versioning for published snapshots of 
 
 - initial published release: `v0.1.0`
 - current release in this iteration: `v0.3.0`
+- `SKILL.md` carries a `version` field so the installed skill can be compared with this repository.
 
 See [CHANGELOG.md](CHANGELOG.md) for release-level notes.
 
